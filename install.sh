@@ -5,6 +5,13 @@
 set -ex # exit on error
 
 cd ~
+ARCH="$(uname -m)"
+
+# Install signatures, else `sudo DEBIAN_FRONTEND=noninteractive apt-get update` will fail
+apt-get install debian-keyring
+gpg --keyserver pgp.mit.edu --recv-keys 648ACFD622F3D138 0E98404D386FA1D9
+gpg --armor --export 648ACFD622F3D138 | apt-key add -
+gpg --armor --export 0E98404D386FA1D9 | apt-key add -
 
 # Install git, Go 1.17, make, curl
 sudo mkdir -p /etc/apt/sources.list.d
@@ -30,15 +37,9 @@ cd ~
 # Install Docker CE
 # Docker CE includes containerd, but we need a separate containerd binary, built
 # in a later step
-# Install signatures or `sudo DEBIAN_FRONTEND=noninteractive apt-get update` will fail
-apt-get install debian-keyring
-gpg --keyserver pgp.mit.edu --recv-keys 648ACFD622F3D138 0E98404D386FA1D9
-gpg --armor --export 648ACFD622F3D138 | apt-key add -
-gpg --armor --export 0E98404D386FA1D9 | apt-key add -
-
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 apt-key finger docker@docker.com | grep '9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88' || echo '**Cannot find Docker key**'
-echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | \
+echo "deb [arch=${ARCH}] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
      sudo tee /etc/apt/sources.list.d/docker.list
 sudo DEBIAN_FRONTEND=noninteractive apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get \
@@ -65,7 +66,6 @@ cd ~
 #   firecracker VM lifecycle plugin and API
 # * tc-redirect-tap and other CNI dependencies that enable VMs to start with
 #   access to networks available on the host
-git clone https://github.com/MecSimCalc/firecracker-containerd.git
 cd firecracker-containerd
 sg docker -c 'make all image firecracker'
 sudo make install install-firecracker demo-network

@@ -61,9 +61,9 @@ sudo reboot
 
 # Run install script
 cd ~
-wget https://raw.githubusercontent.com/MecSimCalc/firecracker-containerd/main/firecracker-containerd.install.sh
-chmod +x firecracker-containerd.install.sh # Make executable
-sudo ./firecracker-containerd.install.sh # Run install script
+git clone https://github.com/MecSimCalc/firecracker-containerd.git
+chmod +x firecracker-containerd/install.sh # Make executable
+sudo ./firecracker-containerd/install.sh # Run install script
 
 
 ```
