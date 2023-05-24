@@ -57,7 +57,7 @@ cd ~
 #   firecracker VM lifecycle plugin and API
 # * tc-redirect-tap and other CNI dependencies that enable VMs to start with
 #   access to networks available on the host
-git clone https://github.com/firecracker-microvm/firecracker-containerd.git
+git clone https://github.com/MecSimCalc/firecracker-containerd.git
 cd firecracker-containerd
 sg docker -c 'make all image firecracker'
 sudo make install install-firecracker demo-network
