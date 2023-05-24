@@ -52,6 +52,13 @@ For more detailed information on the components and how they work, see
 
 ## Installation
 
+Installation tested on DigitalOcean droplet with:
+
+- 4 GB Memory
+- 2 AMD vCPUs
+- 80 GB Disk
+- Ubuntu 20.04 (LTS) x64
+
 ```bash
 # Update the server
 sudo apt-get update
