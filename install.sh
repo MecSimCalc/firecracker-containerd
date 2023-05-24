@@ -31,20 +31,19 @@ cd ~
 # Install Docker CE
 # Docker CE includes containerd, but we need a separate containerd binary, built
 # in a later step
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-gpg --keyserver keyserver.ubuntu.com --recv-keys 648ACFD622F3D138
-gpg --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9
-gpg --export --armor 648ACFD622F3D138 | sudo apt-key add -
-gpg --export --armor 0E98404D386FA1D9 | sudo apt-key add -
-sudo apt update
-
-apt-key finger docker@docker.com | grep '9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88' || echo '**Cannot find Docker key**'
-echo "deb [arch=${ARCH}] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
-     sudo tee /etc/apt/sources.list.d/docker.list
+# https://docs.docker.com/engine/install/ubuntu/
+sudo DEBIAN_FRONTEND=noninteractive apt-get remove docker docker-engine docker.io containerd runc
 sudo DEBIAN_FRONTEND=noninteractive apt-get update
-sudo DEBIAN_FRONTEND=noninteractive apt-get \
-     install --yes \
-     docker-ce aufs-tools-
+sudo DEBIAN_FRONTEND=noninteractive apt-get install ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo DEBIAN_FRONTEND=noninteractive apt-get update
+sudo DEBIAN_FRONTEND=noninteractive apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo usermod -aG docker $(whoami)
 
 # Install device-mapper
