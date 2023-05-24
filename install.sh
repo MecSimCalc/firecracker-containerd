@@ -1,4 +1,4 @@
-# https://github.com/firecracker-microvm/firecracker-containerd/blob/main/docs/quickstart.md
+# Scripts copied from https://github.com/MecSimCalc/firecracker-containerd/blob/main/docs/quickstart.md
 
 #!/bin/bash
 
@@ -6,12 +6,6 @@ set -ex # exit on error
 
 cd ~
 ARCH="$(uname -m)"
-
-# Install signatures, else `sudo DEBIAN_FRONTEND=noninteractive apt-get update` will fail
-apt-get install debian-keyring
-gpg --keyserver pgp.mit.edu --recv-keys 648ACFD622F3D138 0E98404D386FA1D9
-gpg --armor --export 648ACFD622F3D138 | apt-key add -
-gpg --armor --export 0E98404D386FA1D9 | apt-key add -
 
 # Install git, Go 1.17, make, curl
 sudo mkdir -p /etc/apt/sources.list.d
@@ -39,6 +33,12 @@ cd ~
 # in a later step
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 apt-key finger docker@docker.com | grep '9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88' || echo '**Cannot find Docker key**'
+# Install signatures, else `sudo DEBIAN_FRONTEND=noninteractive apt-get update` will fail
+apt-get install debian-keyring
+gpg --keyserver pgp.mit.edu --recv-keys 648ACFD622F3D138 0E98404D386FA1D9
+gpg --armor --export 648ACFD622F3D138 | apt-key add -
+gpg --armor --export 0E98404D386FA1D9 | apt-key add -
+# Continue Install Docker CE
 echo "deb [arch=${ARCH}] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
      sudo tee /etc/apt/sources.list.d/docker.list
 sudo DEBIAN_FRONTEND=noninteractive apt-get update
