@@ -32,7 +32,6 @@ cd ~
 # Docker CE includes containerd, but we need a separate containerd binary, built
 # in a later step
 # https://docs.docker.com/engine/install/ubuntu/
-sudo DEBIAN_FRONTEND=noninteractive apt-get remove docker docker-engine docker.io containerd runc
 sudo DEBIAN_FRONTEND=noninteractive apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get install ca-certificates curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
