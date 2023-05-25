@@ -42,7 +42,7 @@ echo \
   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo DEBIAN_FRONTEND=noninteractive apt-get update
-sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes docker-ce docker-ce-cli docker-buildx-plugin docker-compose-plugin
 sudo usermod -aG docker $(whoami)
 
 # Install device-mapper
