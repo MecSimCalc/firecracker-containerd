@@ -1,6 +1,6 @@
-# Scripts copied from https://github.com/MecSimCalc/firecracker-containerd/blob/main/docs/quickstart.md
-
 #!/bin/bash
+# Scripts copied from https://github.com/MecSimCalc/firecracker-containerd/blob/main/docs/quickstart.md
+# Tested on Ubuntu 20.04 (LTS) x64, x86_64 architecture, AMD CPUs
 
 set -ex # exit on error
 
@@ -15,7 +15,7 @@ ARCH="$(uname -m)"
 
 # Install git, Go 1.17, make, curl
 sudo mkdir -p /etc/apt/sources.list.d
-sudo DEBIAN_FRONTEND=noninteractive add-apt-repository --yes ppa:longsleep/golang-backports
+sudo DEBIAN_FRONTEND=noninteractive add-apt-repository --yes ppa:longsleep/golang-backports # required to install golang-1.17
 sudo DEBIAN_FRONTEND=noninteractive apt --yes update
 sudo DEBIAN_FRONTEND=noninteractive apt-get \
   install --yes \
@@ -30,6 +30,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get \
 
 # Debian's Go 1.17 package installs "go" command under /usr/lib/go-1.17/bin
 export PATH=/usr/lib/go-1.17/bin:$PATH
+sudo ln -s /usr/lib/go-1.17/bin/go /usr/bin/
 
 cd ~
 
@@ -56,7 +57,6 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y dmsetup
 
 ##############################################################################
 
-#!/bin/bash
 cd ~
 
 # Check out firecracker-containerd and build it.  This includes:
@@ -166,3 +166,24 @@ sudo tee /etc/containerd/firecracker-runtime.json <<EOF
   }]
 }
 EOF
+
+
+
+# Setup systemd to run firecracker-containerd service
+mkdir -p /etc/systemd/system/
+sudo tee /etc/systemd/system/firecracker-containerd.service <<EOF
+[Unit]
+Description=Firecracker Containerd
+After=network.target
+
+[Service]
+ExecStart=sudo firecracker-containerd --config /etc/firecracker-containerd/config.toml
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+EOF
+sudo systemctl daemon-reload
+sudo systemctl enable firecracker-containerd.service
+sudo systemctl start firecracker-containerd.service

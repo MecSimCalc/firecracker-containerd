@@ -58,14 +58,32 @@ Installation tested on DigitalOcean droplet with:
 - 2 AMD vCPUs
 - 80 GB Disk
 - Ubuntu 20.04 (LTS) x64
+- x86_64 architecture
+
+### Run install script
 
 ```bash
-# Run install script
 cd ~ && git clone https://github.com/MecSimCalc/firecracker-containerd.git
 chmod +x firecracker-containerd/install.sh # Make executable
 sudo ./firecracker-containerd/install.sh # Run install script
+sudo reboot
+```
 
+### Verify installation
 
+```bash
+sudo systemctl status firecracker-containerd.service
+sudo firecracker-ctr --address /run/firecracker-containerd/containerd.sock \
+     image pull \
+     --snapshotter devmapper \
+     docker.io/library/debian:latest
+sudo firecracker-ctr --address /run/firecracker-containerd/containerd.sock \
+     run \
+     --snapshotter devmapper \
+     --runtime aws.firecracker \
+     --rm --tty --net-host \
+     docker.io/library/debian:latest \
+     test
 ```
 
 ## Roadmap
