@@ -60,12 +60,6 @@ Installation tested on DigitalOcean droplet with:
 - Ubuntu 20.04 (LTS) x64
 
 ```bash
-# Update the server
-sudo apt-get update
-sudo apt-get upgrade # press enter on any popups
-sudo apt-get dist-upgrade
-sudo reboot
-
 # Run install script
 cd ~ && git clone https://github.com/MecSimCalc/firecracker-containerd.git
 chmod +x firecracker-containerd/install.sh # Make executable

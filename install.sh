@@ -4,14 +4,17 @@
 
 set -ex # exit on error
 
+# Update the server
+sudo DEBIAN_FRONTEND=noninteractive apt-get update
+sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade # press enter on any popups
+sudo DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
+
+
 cd ~
 ARCH="$(uname -m)"
 
 # Install git, Go 1.17, make, curl
 sudo mkdir -p /etc/apt/sources.list.d
-echo "deb http://ftp.debian.org/debian bullseye-backports main" | \
-  sudo tee /etc/apt/sources.list.d/bullseye-backports.list
-sudo DEBIAN_FRONTEND=noninteractive apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get \
   install --yes \
   golang-1.17 \
