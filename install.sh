@@ -30,7 +30,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get \
 
 # Debian's Go 1.17 package installs "go" command under /usr/lib/go-1.17/bin
 export PATH=/usr/lib/go-1.17/bin:$PATH
-sudo ln -s /usr/lib/go-1.17/bin/go /usr/bin/
+sudo ln -sf /usr/lib/go-1.17/bin/go /usr/bin/
 
 cd ~
 
@@ -170,7 +170,6 @@ EOF
 
 
 # Setup systemd to run firecracker-containerd service
-mkdir -p /etc/systemd/system/
 sudo tee /etc/systemd/system/firecracker-containerd.service <<EOF
 [Unit]
 Description=Firecracker Containerd
@@ -187,3 +186,7 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl enable firecracker-containerd.service
 sudo systemctl start firecracker-containerd.service
+
+
+
+echo "Installation Done."
