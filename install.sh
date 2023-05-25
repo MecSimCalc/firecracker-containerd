@@ -5,8 +5,8 @@
 set -ex # exit on error
 
 # Update the server
-sudo DEBIAN_FRONTEND=noninteractive apt-get update
-sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade # press enter on any popups
+sudo DEBIAN_FRONTEND=noninteractive apt-get --yes update
+sudo DEBIAN_FRONTEND=noninteractive apt-get --yes upgrade # press enter on any popups
 sudo DEBIAN_FRONTEND=noninteractive apt-get --yes dist-upgrade
 
 
@@ -15,6 +15,8 @@ ARCH="$(uname -m)"
 
 # Install git, Go 1.17, make, curl
 sudo mkdir -p /etc/apt/sources.list.d
+sudo DEBIAN_FRONTEND=noninteractive add-apt-repository --yes ppa:longsleep/golang-backports
+sudo DEBIAN_FRONTEND=noninteractive apt --yes update
 sudo DEBIAN_FRONTEND=noninteractive apt-get \
   install --yes \
   golang-1.17 \
